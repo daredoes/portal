@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %} Add Portal Category {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col s12 ">
+            <div class="card grey lighten-4">
+                <div class="card-content">
+                    <span class="card-title center"><h3>Add Category</h3></span>
+                    <form id="choose_existing" action="add_category" method="post">
+                    {{ csrf_token() }}
+                    <input type="hidden" value="" id="existing_id" name="id">
+
+                    </form>
+                    <form id="choose_new" action="add_category" method="post">
+                        {{ csrf_token() }}
+                        <input type="hidden" value="True" name="new_entry">
+                    </form>
+                    <div class="row">
+                    <select id="choose_select" onchange="choose_select_change();">
+                        <option value="" disabled selected >Choose Another Category</option>
+                        <option value="new">Add New Category</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                        </div>
+                    <form action= "add_category" method="post" enctype="multipart/form-data">
+                        {{ csrf_token() }}
+                        <div class="row">
+                            <div class="input-field">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" value="{{ item.name }}" placeholder="" />
+                            </div>
+                            <div class="input-field">
+                                <label for="key">Key</label>
+                                <input type="text" id="key" name="key" value="{{ item.key }}" placeholder="Used for shortcut navigations" />
+                            </div>
+                            <div class="input-field center">
+                                <input type="submit" value="Save" class="waves-effect waves-light btn"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var openPage = function(value){
+      window.open(value, "_self");
+    };
+
+     var choose_existing = function(id){
+        document.getElementById('existing_id').value = id;
+        document.getElementById('choose_existing').submit();
+    };
+    var choose_select_change = function(){
+        var val = document.getElementById('choose_select').value;
+        if(val) {
+            if (val == 'new') {
+                document.getElementById('choose_new').submit();
+            }
+            else{
+                choose_existing(val);
+            }
+        }
+    };
+
+</script>
+{% endblock %}
+
+{% block jquery_ready %}
+$('select').material_select();
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %} Add Portal Category {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col s12 ">
+            <div class="card grey lighten-4">
+                <div class="card-content">
+                    <span class="card-title center"><h3>Portal Items</h3></span>
+                    {% for grouper, list in items|groupby('category.name') %}
+                    <div class="row center grey lighten-1">
+                        <span class="heavy"><h3>{{ grouper }}</h3></span>
+                        <div class="row">
+                            {% for item in list %}
+                            <a href="{{ item.link }}" class="waves-effect btn waves-light">{{ item.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var openPage = function(value){
+      window.open(value, "_self");
+    };
+
+     var choose_existing = function(id){
+        document.getElementById('existing_id').value = id;
+        document.getElementById('choose_existing').submit();
+    };
+    var choose_select_change = function(){
+        var val = document.getElementById('choose_select').value;
+        if(val) {
+            if (val == 'new') {
+                document.getElementById('choose_new').submit();
+            }
+            else{
+                choose_existing(val);
+            }
+        }
+    };
+
+</script>
+{% endblock %}
+
+{% block jquery_ready %}
+$('select').material_select();
+{% endblock %}
