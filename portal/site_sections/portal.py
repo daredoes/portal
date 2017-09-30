@@ -4,6 +4,7 @@ from portal import *
 class Root:
     @unrestricted
     def index(self, category=None, key=None, session=None, message=''):
+        items = session.query(PortalItem).all()
         if category:
             category_item = session.query(PortalCategory).filter(PortalCategory.key == category).first()
             if category_item:
@@ -13,9 +14,11 @@ class Root:
                         raise HTTPRedirect(item.link)
                     else:
                         message = 'Item Not Found {} {}'.format(key, category)
+                else:
+                    items = category_item.items
         return {
             'message': message,
-            'items': session.query(PortalItem).all()
+            'items': items
         }
 
     def default(self, category=None, key=None, these=None, are=None, protective=None, filler=None, session=None, **params):
@@ -26,6 +29,8 @@ class Root:
                     item = session.query(PortalItem).filter(PortalItem.key == key and PortalItem.category_id == category_item.id).first()
                     if item:
                         raise HTTPRedirect(item.link)
+                else:
+                    raise HTTPRedirect("index/{}".format(category_item.key))
         raise HTTPRedirect("index")
 
     @site_mappable
