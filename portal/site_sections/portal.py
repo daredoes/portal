@@ -3,7 +3,7 @@ from portal import *
 @all_renderable()
 class Root:
     @unrestricted
-    def index(self, category=None, key=None, session=None, message=''):
+    def index(self, category=None, key=None, these=None, are=None, protective=None, filler=None, session=None, message=''):
         items = session.query(PortalItem).all()
         if category:
             category_item = session.query(PortalCategory).filter(PortalCategory.key == category).first()
