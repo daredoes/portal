@@ -21,7 +21,8 @@ class Root:
             'message': message,
             'items': items
         }
-
+    
+    @unrestricted
     def default(self, category=None, key=None, these=None, are=None, protective=None, filler=None, session=None, **params):
         if category:
             category_item = session.query(PortalCategory).filter(PortalCategory.key == category).first()
