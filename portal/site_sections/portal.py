@@ -1,7 +1,8 @@
 from portal import *
 
-@all_renderable()
+@all_renderable(c.PORTAL)
 class Root:
+    @site_mappable
     @unrestricted
     def index(self, category=None, key=None, these=None, are=None, protective=None, filler=None, session=None, message=''):
         items = session.query(PortalItem).all()
