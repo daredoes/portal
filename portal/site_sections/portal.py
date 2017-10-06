@@ -21,7 +21,7 @@ class Root:
             'message': message,
             'items': items
         }
-    
+
     @unrestricted
     def default(self, category=None, key=None, these=None, are=None, protective=None, filler=None, session=None, **params):
         if category:
@@ -61,3 +61,21 @@ class Root:
             'categories': session.query(PortalCategory).all(),
             'new_entry': new_entry
         }
+
+    def delete(self, session, message='', option='', **params):
+        choices = {
+            'item': PortalItem,
+            'category': PortalCategory
+        }
+        message = 'ID not in parameters'
+        if 'id' in params:
+            choice = choices.get(option)
+            message = "Option '{}' not found".format(option)
+            if choice:
+                item = session.query(choice).filter(choice.id == params['id']).first()
+                message = '{} has been deleted'.format(item.name)
+                session.delete(item)
+                session.commit()
+
+        raise HTTPRedirect('add_{}?message={}'.format(option, message))
+
