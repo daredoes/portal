@@ -28,6 +28,9 @@
                     <form action= "add_item" method="post" enctype="multipart/form-data">
                         {{ csrf_token() }}
                         <div class="row">
+                            {% if not item.is_new %}
+                            <input type="hidden" value="{{ item.id }}" name="id" />
+                            {% endif %}
                             <div class="input-field">
                                 <label for="name">Name</label>
                                 <input required type="text" id="name" name="name" value="{{ item.name }}" placeholder="" />
@@ -39,6 +42,11 @@
                             <div class="input-field">
                                 <label for="link">URL</label>
                                 <input required type="text" id="link" name="link" value="{{ item.link }}" placeholder="Placed in the HREF of an <a> tag" />
+                            </div>
+                            <div class="input-field">
+                                <input type="checkbox" name="public" {% if not item.public %}checked{%endif%}  value="False" id="publich" hidden/>
+                                 <input onchange="publicCheck(this)" type="checkbox" {% if item.public %}checked{%endif%}  value="True" name="public" id="public"/>
+                                 <label for="public">Public?</label>
                             </div>
                             <select name="category_id" required>
                                 <option value="" disabled {{ '' if item.name else 'selected'}}>Choose A Category</option>
@@ -82,6 +90,21 @@
                 choose_existing(val);
             }
         }
+    };
+
+     var publicCheck = function(element){
+        var hiddenID = element.id + "h";
+        var hiddenElem = $("#" + hiddenID);
+
+        console.log(element.checked);
+        if(element.checked){
+
+            hiddenElem.prop("checked", false);
+        }
+        else{
+            hiddenElem.prop("checked", true);
+        }
+        console.log(hiddenElem.prop('checked'));
     };
 
 </script>

@@ -28,6 +28,9 @@
                     <form action= "add_category" method="post" enctype="multipart/form-data">
                         {{ csrf_token() }}
                         <div class="row">
+                            {% if not item.is_new %}
+                            <input type="hidden" value="{{ item.id }}" name="id" />
+                            {% endif %}
                             <div class="input-field">
                                 <label for="name">Name</label>
                                 <input type="text" id="name" name="name" value="{{ item.name }}" placeholder="" />
@@ -35,6 +38,11 @@
                             <div class="input-field">
                                 <label for="key">Key</label>
                                 <input type="text" id="key" name="key" value="{{ item.key }}" placeholder="Used for shortcut navigations" />
+                            </div>
+                            <div class="input-field">
+                                <input type="checkbox" name="public" {% if not item.public %}checked{%endif%}  value="False" id="publich" hidden/>
+                                 <input onchange="publicCheck(this)" type="checkbox" {% if item.public %}checked{%endif%}  value="True" name="public" id="public"/>
+                                 <label for="public">Public?</label>
                             </div>
                             <div class="input-field center">
                                 <input type="submit" value="Save" class="waves-effect waves-light btn"/>
@@ -71,6 +79,20 @@
                 choose_existing(val);
             }
         }
+    };
+     var publicCheck = function(element){
+        var hiddenID = element.id + "h";
+        var hiddenElem = $("#" + hiddenID);
+
+        console.log(element.checked);
+        if(element.checked){
+
+            hiddenElem.prop("checked", false);
+        }
+        else{
+            hiddenElem.prop("checked", true);
+        }
+        console.log(hiddenElem.prop('checked'));
     };
 
 </script>
