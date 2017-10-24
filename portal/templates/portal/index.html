@@ -7,18 +7,15 @@
             <div class="card grey lighten-4">
                 <div class="card-content">
                     <span class="card-title center"><h3>Portal Items</h3></span>
-                    {% for grouper, list in items|groupby('category.name') %}
-                    {% set approved_list = list|rejectattr("public", 'equalto', false) %}
-                    {% if approved_list[0] %}
+                    {% for grouper, list in items|rejectattr("public", 'equalto', false)|groupby('category.name') %}
                     <div class="row center grey lighten-1">
                         <span class="heavy"><h3>{{ grouper }}</h3></span>
                         <div class="row">
-                            {% for item in approved_list %}
+                            {% for item in list %}
                             <a href="{{ item.link }}" class="waves-effect btn waves-light">{{ item.name }}</a>
                             {% endfor %}
                         </div>
                     </div>
-                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
